@@ -1,0 +1,60 @@
+metadata:
+  version: "1"
+  dependencies:
+    apps:
+      - id: dynatrace.automations
+        version: ^1.2311.5
+      - id: dynatrace.email
+        version: ^1.8.1
+  inputs: []
+workflow:
+  title: vk_workflow
+  tasks:
+    send_email_1:
+      name: send_email_1
+      description: Send email
+      action: dynatrace.email:send-email
+      input:
+        cc: []
+        to:
+          - vivek9325@gmail.com
+        bcc: []
+        content: Error logs captured in the dataset
+        subject: Error logs captured
+      position:
+        x: 0
+        y: 2
+      predecessors:
+        - execute_dql_query_1
+      conditions:
+        states:
+          execute_dql_query_1: OK
+    execute_dql_query_1:
+      name: execute_dql_query_1
+      description: Make use of Dynatrace Grail data in your workflow.
+      action: dynatrace.automations:execute-dql-query
+      input:
+        query: fetch logs | summarize total_count=count(), by:{status} | filter status
+          == "ERROR"
+      position:
+        x: 0
+        y: 1
+      predecessors: []
+  description: Find out the count of error logs
+  trigger:
+    schedule:
+      rule: null
+      trigger:
+        type: time
+        time: 10:22
+      timezone: Asia/Calcutta
+      isActive: true
+      isFaulty: false
+      filterParameters:
+        earliestStart: 2025-11-14
+      inputs: {}
+  schemaVersion: 3
+  result: null
+  input: {}
+  hourlyExecutionLimit: 1000
+  type: STANDARD

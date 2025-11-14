@@ -1,0 +1,71 @@
+{
+  "id": "5b0bddef-727e-498b-91e2-5c48b06e7f4c",
+  "title": "vk_workflow",
+  "tasks": {
+    "send_email_1": {
+      "name": "send_email_1",
+      "input": {
+        "cc": [],
+        "to": [
+          "vivek9325@gmail.com"
+        ],
+        "bcc": [],
+        "content": "Error logs captured in the dataset",
+        "subject": "Error logs captured"
+      },
+      "action": "dynatrace.email:send-email",
+      "position": {
+        "x": 0,
+        "y": 2
+      },
+      "conditions": {
+        "states": {
+          "execute_dql_query_1": "OK"
+        }
+      },
+      "description": "Send email",
+      "predecessors": [
+        "execute_dql_query_1"
+      ]
+    },
+    "execute_dql_query_1": {
+      "name": "execute_dql_query_1",
+      "input": {
+        "query": "fetch logs | summarize total_count=count(), by:{status} | filter status == \"ERROR\""
+      },
+      "action": "dynatrace.automations:execute-dql-query",
+      "position": {
+        "x": 0,
+        "y": 1
+      },
+      "description": "Make use of Dynatrace Grail data in your workflow.",
+      "predecessors": []
+    }
+  },
+  "description": "Find out the count of error logs",
+  "actor": "acb02fa2-3c2b-490e-b549-0cfff3fa7736",
+  "owner": "acb02fa2-3c2b-490e-b549-0cfff3fa7736",
+  "ownerType": "USER",
+  "isPrivate": false,
+  "trigger": {
+    "schedule": {
+      "isActive": true,
+      "isFaulty": false,
+      "trigger": {
+        "time": "10:22",
+        "type": "time"
+      },
+      "rule": null,
+      "filterParameters": {
+        "earliestStart": "2025-11-14"
+      },
+      "timezone": "Asia/Calcutta",
+      "inputs": {}
+    }
+  },
+  "schemaVersion": 3,
+  "result": null,
+  "input": {},
+  "hourlyExecutionLimit": 1000,
+  "type": "STANDARD"
+}
